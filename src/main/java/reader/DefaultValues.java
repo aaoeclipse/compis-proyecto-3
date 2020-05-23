@@ -1,5 +1,7 @@
 package reader;
 
+import dataStructures.Operations;
+
 import java.util.ArrayList;
 
 public final class DefaultValues {
@@ -50,10 +52,23 @@ public final class DefaultValues {
     public static int STAR = 2502;
     public static int ATLEASTONE = 2503;
     public static int EPSILON = 2504;
+    public static int ONEORLESS = 2505;
 
     public static ArrayList<Integer> ignore = new ArrayList<>(){
         {
             add((int) ')');
         }
     };
+
+    public static Operations opertaions = new Operations();
+
+//    public static ArrayList<Operations> operations = new ArrayList<>(){
+//        {
+//            add(new Operations(CONCAT, false));
+//            add(new Operations(OR, false));
+//            add(new Operations(STAR, true));
+//            add(new Operations(ATLEASTONE, true));
+//            add(new Operations(ONEORLESS, true));
+//        }
+//    };
 }

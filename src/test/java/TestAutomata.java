@@ -2,6 +2,7 @@ import automata.DFA;
 import automata.State;
 import automata.TransitionState;
 import controler.DFACrator;
+import dataStructures.SyntaxTree;
 import dataStructures.Token;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class TestAutomata extends TestCase {
 
     public void testSimpleDFA(){
         dfa = new DFA();
-//        dfa.constructDFA();
+        SyntaxTree tree = new SyntaxTree("a");
         assertTrue(dfa.simulate("a"));
     }
 

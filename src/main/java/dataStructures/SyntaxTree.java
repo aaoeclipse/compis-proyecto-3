@@ -10,6 +10,11 @@ public class SyntaxTree {
     private NodeSyntax<Integer> tree;
 
     public SyntaxTree(){regularExpression = "";}
+    public SyntaxTree(String input){
+        regularExpression = input;
+        withConcat(input);
+        constructTree();
+    }
 
 
     /**
@@ -64,6 +69,10 @@ public class SyntaxTree {
      * in the class
      */
     public void constructTree(){
+        if (this.regularExpression == ""){
+            System.err.println("Regular Expression Empty");
+            return;
+        }
         // currNode
         NodeSyntax<Integer> currNode = new NodeSyntax<>();
 
@@ -75,7 +84,7 @@ public class SyntaxTree {
 
         for (char character:this.regularExpression.toCharArray()) {
             c = (int) character;
-            if ()
+//            if ()
         }
 
     }
