@@ -23,27 +23,34 @@ public class TestSyntaxTree extends TestCase {
 
     public void testConcat() {
         String test = stree.withConcat("ab");
-        assertEquals("a" + (char) DefaultValues.CONCAT + "b"+(char)DefaultValues.EOF, test);
+        assertEquals("a" + (char) DefaultValues.CONCAT + "b", test);
+
         test = stree.withConcat("abc");
-        assertEquals("a" + (char) DefaultValues.CONCAT + "b" + (char) DefaultValues.CONCAT + "c"+(char)DefaultValues.EOF, test);
+        assertEquals("a" + (char) DefaultValues.CONCAT + "b" + (char) DefaultValues.CONCAT + "c", test);
 
         test = stree.withConcat("ab(c)");
-        assertEquals("a" + (char) DefaultValues.CONCAT + "b" + (char) DefaultValues.CONCAT + "(c)"+(char)DefaultValues.EOF, test);
+        assertEquals("a" + (char) DefaultValues.CONCAT + "b" + (char) DefaultValues.CONCAT + "(c)", test);
 
         test = stree.withConcat("ab(cc)(d)");
-        assertEquals("a" + (char) DefaultValues.CONCAT + "b" + (char) DefaultValues.CONCAT + "(c" + (char) DefaultValues.CONCAT + "c)" + (char) DefaultValues.CONCAT + "(d)"+(char)DefaultValues.EOF, test);
+        assertEquals("a" + (char) DefaultValues.CONCAT + "b" + (char) DefaultValues.CONCAT + "(c" + (char) DefaultValues.CONCAT + "c)" + (char) DefaultValues.CONCAT + "(d)", test);
 
         test = stree.withConcat("a|b(c|c)(d)");
-        assertEquals("a|b" + (char) DefaultValues.CONCAT + "(c|c)" + (char) DefaultValues.CONCAT + "(d)"+(char)DefaultValues.EOF, test);
+        assertEquals("a|b" + (char) DefaultValues.CONCAT + "(c|c)" + (char) DefaultValues.CONCAT + "(d)", test);
 
         test = stree.withConcat("a|b|(c|c)(d)");
-        assertEquals("a|b|(c|c)" + (char) DefaultValues.CONCAT + "(d)"+(char)DefaultValues.EOF, test);
+        assertEquals("a|b|(c|c)" + (char) DefaultValues.CONCAT + "(d)", test);
 
         test = stree.withConcat("a|b|(c"+(char)DefaultValues.STAR+")"+(char)DefaultValues.STAR+"(d)");
-        assertEquals("a|b|(c"+(char)DefaultValues.STAR+")"+(char)DefaultValues.STAR+ (char) DefaultValues.CONCAT+"(d)"+(char)DefaultValues.EOF, test);
+        assertEquals("a|b|(c"+(char)DefaultValues.STAR+")"+(char)DefaultValues.STAR+ (char) DefaultValues.CONCAT+"(d)", test);
     }
 
     public void testPostfix(){
-        String test = "a|b&(e|c)*";
+        String test = "a"+ (char) DefaultValues.OR +"b(e"+(char)DefaultValues.OR+"c)"+(char)DefaultValues.STAR;
+        stree = new SyntaxTree(test);
+
+        System.out.println(stree);
+        this.stree.toPostFix();
+        System.out.println(stree);
+//        stree = new SyntaxTree();
     }
 }

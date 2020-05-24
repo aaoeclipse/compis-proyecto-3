@@ -35,7 +35,7 @@ public final class DefaultValues {
         }
     };
 
-        public static int EOF = -1;
+    public static int EOF = -1;
     public static int BLANK = (int) ' ';
     public static int NL = (int) '\n';
 
@@ -60,15 +60,14 @@ public final class DefaultValues {
         }
     };
 
+    public static ArrayList<Integer> BINARYOPERATIONS = new ArrayList<>(){
+        {
+            add(STAR);
+            add(ATLEASTONE);
+            add(ONEORLESS);
+        }
+    };
+
     public static Operations opertaions = new Operations();
 
-//    public static ArrayList<Operations> operations = new ArrayList<>(){
-//        {
-//            add(new Operations(CONCAT, false));
-//            add(new Operations(OR, false));
-//            add(new Operations(STAR, true));
-//            add(new Operations(ATLEASTONE, true));
-//            add(new Operations(ONEORLESS, true));
-//        }
-//    };
 }

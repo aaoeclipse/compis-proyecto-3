@@ -20,16 +20,16 @@ public class DFA {
         // for each operation in tree
         Stack<NodeSyntax> results = new Stack<>();
 
-        NodeSyntax<Integer> currOperation = tree.nextOperation();
-        int currentValue = currOperation.getValue();
-
-        while (currentValue != DefaultValues.EOF){
-            if (DefaultValues.opertaions.getLeftOperation(currentValue)){
-                // is left operation, meaning it only depends on the left character
-                // check if
-            }
-            currOperation = tree.nextOperation();
-        }
+//        NodeSyntax<Integer> currOperation = tree.nextOperation();
+//        int currentValue = currOperation.getValue();
+//
+//        while (currentValue != DefaultValues.EOF){
+//            if (DefaultValues.opertaions.getLeftOperation(currentValue)){
+//                // is left operation, meaning it only depends on the left character
+//                // check if
+//            }
+//            currOperation = tree.nextOperation();
+//        }
 
     }
 

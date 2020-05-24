@@ -12,7 +12,7 @@ public class NodeSyntax<E> {
         this.value = value;
         this.position = position;
     }
-
+    public NodeSyntax(E value) {this.value = value;}
     public NodeSyntax() {}
 
     public NodeSyntax<E> getLeftChild() {
@@ -65,5 +65,17 @@ public class NodeSyntax<E> {
 
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
+    }
+
+    @Override
+    public String toString() {
+        return "NodeSyntax{" +
+                "value=" + value +
+                ", position=" + position +
+                ", parentNode=" + parentNode +
+                ", leftChild=" + leftChild +
+                ", rightChild=" + rightChild +
+                ", nullable=" + nullable +
+                '}';
     }
 }

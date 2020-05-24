@@ -1,6 +1,10 @@
 package dataStructures;
 
+import controler.RegExConverter;
 import reader.DefaultValues;
+import reader.ReaderCustom;
+
+import java.util.Stack;
 
 /**
  * this tree is used to create a DFA from a regular expression
@@ -8,8 +12,12 @@ import reader.DefaultValues;
 public class SyntaxTree {
     private String regularExpression;
     private NodeSyntax<Integer> tree;
+    private RegExConverter regex;
 
-    public SyntaxTree(){regularExpression = "";}
+    public SyntaxTree(){
+        regularExpression = "";
+    }
+
     public SyntaxTree(String input){
         regularExpression = input;
         withConcat(input);
@@ -54,13 +62,15 @@ public class SyntaxTree {
             }
             toReturn.append(input.charAt(i));
         }
-        toReturn.append((char)DefaultValues.EOF);
 
         regularExpression = toReturn.toString();
         return regularExpression;
     }
 
     public void toPostFix(){
+        regex = new RegExConverter();
+        this.regularExpression = regex.infixToPostfix(regularExpression);
+        this.regularExpression+=((char)DefaultValues.EOF);
 
     }
 
@@ -69,10 +79,12 @@ public class SyntaxTree {
      * in the class
      */
     public void constructTree(){
-        if (this.regularExpression == ""){
+        if (this.regularExpression.equals("")){
             System.err.println("Regular Expression Empty");
             return;
         }
+        Stack<NodeSyntax<Integer>> stackNode = new Stack<>();
+
         // currNode
         NodeSyntax<Integer> currNode = new NodeSyntax<>();
 
@@ -84,41 +96,49 @@ public class SyntaxTree {
 
         for (char character:this.regularExpression.toCharArray()) {
             c = (int) character;
-//            if ()
+            if (c == DefaultValues.EOF)
+                break;
+            if (DefaultValues.availableChars.contains(c)){
+                stackNode.push(new NodeSyntax<>(c, position));
+                position++;
+            }else{
+                if (DefaultValues.BINARYOPERATIONS.contains(c)){
+                    currNode = new NodeSyntax<>(c);
+
+
+                }else{
+
+                }
+            }
         }
 
     }
 
-    // computing follow pos
-//    public void followpos(){
-//        for (Node n: tree) {
-//            // n is cat-node with left child c1 and right child c2
-//            if (n.equals(c1 concat c2))
-//                for (i : lastpos(c1)) {
-//                    followpos(i) = followpos(i) union firstpos(c2);
-//                }
-//            else if (n.starNode()){
-//                for (int i: lastpos(n)) {
-//                    followpos(i) = followpos(i) union firstpos(n);
-//                }
-//            }
-//        }
-//    }
-//
-//    // converting RE to DFA
-//    public DFA reToDfa(){
-//        // Dstates to contain only the unmarked state firstpos(n0) where n0 is the root of syntax tree T for (r)
-//        while (there is an unmarked state S in Dstates){
-//            makr S;
-//            for (input symbol a: sigma) {
-//                let U be the union of followpos(p);
-//                for all p in S taht correspon to a;
-//                if (U is not in Dstates)
-//                    add U as an unmarked state to Dstates;
-//                Dtran[S,a] = U;
-//            }
-//        }
-//    }
+    public String getRegularExpression(){
+        return regularExpression;
+    }
 
+    @Override
+    public String toString() {
+        StringBuilder toReturn = new StringBuilder();
+        for (char c:this.regularExpression.toCharArray()) {
+            if (c == (char) DefaultValues.STAR)
+                toReturn.append("*");
+            else if (c == (char) DefaultValues.CONCAT)
+                toReturn.append(".");
+            else if (c == (char) DefaultValues.OR)
+                toReturn.append("|");
+            else if (c == (char) DefaultValues.ATLEASTONE)
+                toReturn.append("+");
+            else if (c == (char) DefaultValues.ONEORLESS)
+                toReturn.append("?");
+            else
+                toReturn.append(c);
+        }
+        return toReturn.toString();
+    }
 
+    public String showTree(){
+        return tree.toString();
+    }
 }

@@ -1,20 +1,22 @@
 package controler;
 
+import reader.DefaultValues;
+
 import java.util.*;
 
 public class RegExConverter {
 
     /** Operators precedence map. */
     private static final Map<Character, Integer> precedenceMap;
+
     static {
         Map<Character, Integer> map = new HashMap<Character, Integer>();
         map.put('(', 1);
-        map.put('|', 2);
-        map.put('.', 3); // explicit concatenation operator
-        map.put('?', 4);
-        map.put('*', 4);
-        map.put('+', 4);
-        map.put('^', 5);
+        map.put((char) DefaultValues.OR, 2);
+        map.put((char) DefaultValues.CONCAT, 2); // explicit concatenation operator
+        map.put((char) DefaultValues.ATLEASTONE, 4);
+        map.put((char) DefaultValues.STAR, 4);
+        map.put((char) DefaultValues.ONEORLESS, 4);
         precedenceMap = Collections.unmodifiableMap(map);
     };
 
@@ -35,8 +37,9 @@ public class RegExConverter {
      */
     private static String formatRegEx(String regex) {
         String res = new String();
-        List<Character> allOperators = Arrays.asList('|', '?', '+', '*', '^');
-        List<Character> binaryOperators = Arrays.asList('^', '|');
+        List<Character> allOperators = Arrays.asList((char) DefaultValues.OR, (char) DefaultValues.ATLEASTONE,
+                (char) DefaultValues.ONEORLESS, (char) DefaultValues.STAR);
+        List<Character> binaryOperators = Arrays.asList((char) DefaultValues.OR);
 
         for (int i = 0; i < regex.length(); i++) {
             Character c1 = regex.charAt(i);
@@ -47,12 +50,12 @@ public class RegExConverter {
                 res += c1;
 
                 if (!c1.equals('(') && !c2.equals(')') && !allOperators.contains(c2) && !binaryOperators.contains(c1)) {
-                    res += '.';
+                    res += (char) DefaultValues.CONCAT;
                 }
             }
         }
         res += regex.charAt(regex.length() - 1);
-
+        System.out.println(res);
         return res;
     }
 
@@ -68,7 +71,8 @@ public class RegExConverter {
 
         Stack<Character> stack = new Stack<Character>();
 
-        String formattedRegEx = formatRegEx(regex);
+//        String formattedRegEx = formatRegEx(regex);
+        String formattedRegEx = regex;
 
         for (Character c : formattedRegEx.toCharArray()) {
             switch (c) {
