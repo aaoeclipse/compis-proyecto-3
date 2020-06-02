@@ -1,54 +1,107 @@
 package dataStructures;
 
+import java.util.ArrayList;
+
 public class NodeSyntax<E> {
     private E value;
-    private int position;
+    private ArrayList<Integer> firstpos;
     private NodeSyntax<E> parentNode;
+    private ArrayList<Integer> lastpos;
+    private boolean nullable;
 
-    private NodeSyntax<E> leftChild;
-    private NodeSyntax<E> rightChild;
+    private NodeSyntax<E> c1;
+    private NodeSyntax<E> c2;
 
     public NodeSyntax(E value, int position) {
         this.value = value;
-        this.position = position;
+        this.firstpos = new ArrayList<>();
+        this.lastpos = new ArrayList<>();
+        this.firstpos.add(position);
     }
-    public NodeSyntax(E value) {this.value = value;}
+    public NodeSyntax(E value, int position, int lastpos) {
+        this.value = value;
+        this.firstpos = new ArrayList<>();
+        this.lastpos = new ArrayList<>();
+        this.firstpos.add(position);
+        this.lastpos.add(lastpos);
+    }
+    public NodeSyntax(E value) {
+        this.value = value;
+        this.firstpos = new ArrayList<>();
+        this.lastpos = new ArrayList<>();
+    }
     public NodeSyntax() {}
 
     public NodeSyntax<E> getLeftChild() {
-        return leftChild;
+        return c1;
     }
 
     public void setLeftChild(NodeSyntax<E> leftChild) {
-        this.leftChild = leftChild;
+        this.c1 = leftChild;
     }
 
     public NodeSyntax<E> getRightChild() {
-        return rightChild;
+        return c2;
     }
 
     public void setRightChild(NodeSyntax<E> rightChild) {
-        this.rightChild = rightChild;
+        this.c2 = rightChild;
     }
-
-    private boolean nullable;
-
-
 
     public E getValue() {
         return value;
+    }
+
+    public ArrayList<Integer> getLastpos() {
+        return lastpos;
+    }
+
+    public void setLastpos(ArrayList<Integer> lastpos) {
+        this.lastpos = lastpos;
     }
 
     public void setValue(E value) {
         this.value = value;
     }
 
-    public int getPosition() {
-        return position;
+    public ArrayList<Integer> getPosition() {
+        return firstpos;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setPosition(ArrayList<Integer> position) {
+        this.firstpos = position;
+    }
+
+    public void addFirstPos(int firstpos){
+        if (!this.firstpos.contains(firstpos)){
+            this.firstpos.add(firstpos);
+        }
+    }
+
+    public void addFirstPosArray(ArrayList<Integer> firstpos){
+        for (int i:firstpos) {
+            addFirstPos(i);
+        }
+    }
+
+    public ArrayList<Integer> getFirstpos() {
+        return firstpos;
+    }
+
+    public void setFirstpos(ArrayList<Integer> firstpos) {
+        this.firstpos = firstpos;
+    }
+
+    public void addLastPos(int lastpos){
+        if (!this.lastpos.contains(lastpos)){
+            this.lastpos.add(lastpos);
+        }
+    }
+
+    public void addLastPosrray(ArrayList<Integer> lastpos){
+        for (int i:lastpos) {
+            addLastPos(i);
+        }
     }
 
     public NodeSyntax<E> getParentNode() {
@@ -69,13 +122,10 @@ public class NodeSyntax<E> {
 
     @Override
     public String toString() {
-        return "NodeSyntax{" +
-                "value=" + value +
-                ", position=" + position +
-                ", parentNode=" + parentNode +
-                ", leftChild=" + leftChild +
-                ", rightChild=" + rightChild +
-                ", nullable=" + nullable +
-                '}';
+        if (c1 == null && c2 == null)
+            return "Node ("+value+") {"+firstpos+"}{"+lastpos+"} -> ()";
+        if (c1 != null && c2 == null)
+            return "Node ("+value+") {"+firstpos+"}{"+lastpos+"} -> ("+c1.getValue()+")";
+        return "Node ("+value+") {"+firstpos+"}{"+lastpos+"} -> ("+ c1.getValue()+", "+c2.getValue()+")";
     }
 }

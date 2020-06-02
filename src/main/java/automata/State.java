@@ -5,11 +5,30 @@ import java.util.UUID;
 
 public class State {
     private String id;
+    private String name;
     private boolean i;
     private boolean f;
 
     public State(){
         this.id = UUID.randomUUID().toString();
+    }
+
+    public State(String id, boolean i, boolean f) {
+        this.id = id;
+        this.i = i;
+        this.f = f;
+    }
+
+    public State(boolean i) {
+        this.id = UUID.randomUUID().toString();
+        this.i = i;
+        this.f = false;
+    }
+
+    public State(boolean i, boolean f) {
+        this.id = UUID.randomUUID().toString();
+        this.i = i;
+        this.f = f;
     }
 
     public String getId() {
@@ -42,5 +61,14 @@ public class State {
         if (o == null || getClass() != o.getClass()) return false;
         State state = (State) o;
         return Objects.equals(id, state.id);
+    }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "id='" + id + '\'' +
+                ", i=" + i +
+                ", f=" + f +
+                '}';
     }
 }

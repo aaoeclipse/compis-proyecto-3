@@ -1,29 +1,39 @@
 package dataStructures;
 
 import controler.RegExConverter;
+import org.w3c.dom.Node;
 import reader.DefaultValues;
 import reader.ReaderCustom;
 
-import java.util.Stack;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * this tree is used to create a DFA from a regular expression
  */
 public class SyntaxTree {
     private String regularExpression;
+    private ArrayList<NodeSyntax<Integer>> allNodes;
     private NodeSyntax<Integer> tree;
     private RegExConverter regex;
+    public Map<NodeSyntax<Integer>, ArrayList<Integer>> followTable;
 
     public SyntaxTree(){
         regularExpression = "";
     }
 
     public SyntaxTree(String input){
+        followTable = new HashMap<>();
+        allNodes = new ArrayList<>();
         regularExpression = input;
-        withConcat(input);
+        regularExpression = withConcat(input);
+        toPostFix();
         constructTree();
     }
 
+    public ArrayList<NodeSyntax<Integer>> getAllNodes() {
+        return allNodes;
+    }
 
     /**
      * returns the string with concat character in them
@@ -96,27 +106,130 @@ public class SyntaxTree {
 
         for (char character:this.regularExpression.toCharArray()) {
             c = (int) character;
-            if (c == DefaultValues.EOF)
+            if (c == DefaultValues.EOF || c == 65535) {
+                currNode = new NodeSyntax<>(DefaultValues.EOF, position, position);
+                stackNode.push(currNode);
+                allNodes.add(currNode);
+                currNode = new NodeSyntax<>(DefaultValues.CONCAT);
+                rightChild = stackNode.pop();
+                leftChild = stackNode.pop();
+                currNode.setLeftChild(leftChild);
+                currNode.setRightChild(rightChild);
+                currNode.setPosition(new ArrayList<>(leftChild.getPosition()));
+                currNode.setLastpos(new ArrayList<>(rightChild.getPosition()));
+                stackNode.push(currNode);
+                allNodes.add(currNode);
                 break;
+            }
+            // leaf | alphanumeric value
             if (DefaultValues.availableChars.contains(c)){
-                stackNode.push(new NodeSyntax<>(c, position));
+                currNode = new NodeSyntax<Integer>(c, position, position);
+                stackNode.push(currNode);
                 position++;
             }else{
+                // Operation either binary (*?+) or non binary (|&)
                 if (DefaultValues.BINARYOPERATIONS.contains(c)){
                     currNode = new NodeSyntax<>(c);
-
-
+                    leftChild = stackNode.pop();
+                    currNode.setLeftChild(leftChild);
+                    currNode.setLastpos(new ArrayList(leftChild.getLastpos()));
+                    currNode.setPosition(new ArrayList(leftChild.getPosition()));
+                    stackNode.push(currNode);
                 }else{
+                    // es cat or OR
+                    if (c == DefaultValues.OR) {
+                        currNode = new NodeSyntax<>(c);
+                        // Setting childs
+                        rightChild = stackNode.pop();
+                        leftChild = stackNode.pop();
 
+                        currNode.setLeftChild(leftChild);
+                        currNode.setRightChild(rightChild);
+                        // adding position
+                        // firstpos
+                        if (DefaultValues.NULLABLE.contains(leftChild.getValue())) {
+                            currNode.setPosition(new ArrayList(leftChild.getPosition()));
+                            currNode.addFirstPosArray(new ArrayList(rightChild.getPosition()));
+                        } else {
+                            currNode.setPosition(new ArrayList(leftChild.getPosition()));
+                        }
+                        // last position
+                        if (DefaultValues.NULLABLE.contains(rightChild.getValue())) {
+                            currNode.setLastpos(new ArrayList(leftChild.getLastpos()));
+                            currNode.addLastPosrray(new ArrayList(rightChild.getLastpos()));
+                        } else {
+                            currNode.setLastpos(new ArrayList(rightChild.getLastpos()));
+                        }
+                        // pushing to stack
+                        stackNode.push(currNode);
+                    } else {
+                        currNode = new NodeSyntax<>(c);
+                        // Setting childs
+                        rightChild = stackNode.pop();
+                        leftChild = stackNode.pop();
+
+                        currNode.setLeftChild(leftChild);
+                        currNode.setRightChild(rightChild);
+                        // adding position
+                        // firstpos
+                        if (DefaultValues.BINARYOPERATIONS.contains(leftChild.getValue())) {
+                            currNode.setPosition(new ArrayList(leftChild.getPosition()));
+                            currNode.addFirstPosArray(new ArrayList(rightChild.getPosition()));
+                        } else {
+                            currNode.setPosition(new ArrayList(leftChild.getPosition()));
+                        }
+                        // last position
+                        if (DefaultValues.BINARYOPERATIONS.contains(rightChild.getValue())) {
+                            currNode.setLastpos(new ArrayList(leftChild.getLastpos()));
+                            currNode.addLastPosrray(new ArrayList(rightChild.getLastpos()));
+                        } else {
+                            currNode.setLastpos(new ArrayList(rightChild.getLastpos()));
+                        }
+                        // pushing to stack
+                        stackNode.push(currNode);
+                    }
                 }
             }
+            allNodes.add(currNode);
         }
-
+        this.tree = stackNode.pop();
     }
 
     public String getRegularExpression(){
         return regularExpression;
     }
+
+    public void followpos(){
+        followTable = new HashMap<>();
+        int counter = 1;
+        boolean added;
+        for (NodeSyntax<Integer> n: allNodes)
+            if (DefaultValues.availableChars.contains(n.getValue()) || n.getValue().equals(DefaultValues.EOF))
+                followTable.put(n, new ArrayList<>());
+        for (NodeSyntax<Integer> n: allNodes){
+            // concat
+            if (n.getValue().equals(DefaultValues.CONCAT)){
+                // lado izquierdo agregar valors del lado derecho
+                for (int i: n.getLeftChild().getLastpos()) {
+                    for (int j: n.getRightChild().getFirstpos())
+                        followTable.get(getSyntaxNode(i)).add(j);
+                }
+            } else if (n.getValue().equals(DefaultValues.STAR))
+                for (int i:n.getLastpos())
+                    for (int j: n.getFirstpos())
+                        followTable.get(getSyntaxNode(i)).add(j);
+            }
+        }
+
+        private NodeSyntax<Integer> getSyntaxNode(int idInt){
+            ArrayList<Integer> id = new ArrayList<>();
+            id.add(idInt);
+            for (NodeSyntax<Integer> n:allNodes) {
+                if (n.getPosition().equals(id))
+                    return n;
+            }
+            return null;
+        }
 
     @Override
     public String toString() {
@@ -140,5 +253,37 @@ public class SyntaxTree {
 
     public String showTree(){
         return tree.toString();
+    }
+
+    public String getTreeRoot() {
+
+        return this.tree.toString();
+        }
+
+    public String getFullTree() {
+        String toReturn = "";
+        for (NodeSyntax<Integer> node: allNodes) {
+            toReturn += node.toString() + "\n";
+        }
+        return toReturn;
+    }
+
+    public String getToStringFollowPos() {
+        int counter = 1;
+        StringBuilder toReturn = new StringBuilder("Node | followpos\n");
+        int value;
+        while (counter <= allNodes.size()) {
+            for (Map.Entry<NodeSyntax<Integer>, ArrayList<Integer>> row : this.followTable.entrySet()) {
+                value = row.getKey().getValue();
+                if (value == DefaultValues.EOF)
+                    value = (int) '#';
+                if (counter == row.getKey().getPosition().get(0)) {
+                    toReturn.append((char) value).append(".").append(row.getKey().getPosition().get(0)).append(" | ").append(row.getValue()).append('\n');
+                }
+            }
+            counter++;
+        }
+
+        return toReturn.toString();
     }
 }

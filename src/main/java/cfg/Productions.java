@@ -4,40 +4,40 @@ import dataStructures.Token;
 
 import java.util.ArrayList;
 
-public class Productions {
-    int nonDeterminant;
-    ArrayList<Integer> definition;
+public class Productions <T>{
+    T nonDeterminant;
+    ArrayList<T> definition;
 
 
     public Productions(){}
 
-    public Productions(int nonDeterminant, ArrayList<Integer> definition) {
+    public Productions(T nonDeterminant, ArrayList<T> definition) {
         this.nonDeterminant = nonDeterminant;
         this.definition = definition;
     }
 
-    public int getNonDeterminant() {
+    public T getNonDeterminant() {
         return nonDeterminant;
     }
 
-    public void setNonDeterminant(int nonDeterminant) {
+    public void setNonDeterminant(T nonDeterminant) {
         this.nonDeterminant = nonDeterminant;
     }
 
-    public ArrayList<Integer> getDefinition() {
+    public ArrayList<T> getDefinition() {
         return definition;
     }
 
-    public void setDefinition(ArrayList<Integer> definition) {
+    public void setDefinition(ArrayList<T> definition) {
         this.definition = definition;
     }
 
     @Override
     public String toString() {
         String toReturn = "";
-        for (int i:definition) {
-            toReturn += (char) i;
+        for (T i:definition) {
+            toReturn += i;
         }
-        return "" + (char) nonDeterminant + " -> " + toReturn;
+        return "" + nonDeterminant + " -> " + toReturn;
     }
 }

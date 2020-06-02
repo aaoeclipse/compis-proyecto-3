@@ -7,55 +7,55 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ContextFreeGrammar {
-    ArrayList<Integer> nonDeterminant;
-    ArrayList<Integer> determinant;
+public class ContextFreeGrammar<T> {
+    ArrayList<T> nonDeterminant;
+    ArrayList<T> determinant;
 
-    Set<Productions> P;
+    Set<Productions<T>> P;
 
     public ContextFreeGrammar(){
         nonDeterminant = new ArrayList<>();
         determinant = new ArrayList<>();
-        P = new HashSet<Productions>();
+        P = new HashSet<Productions<T>>();
     }
 
     public void findDeterminant(){
         determinant = new ArrayList<>();
-        for (Productions p: P) {
-            for (int ch:p.getDefinition()) {
-                if (DefaultValues.availableChars.contains(ch) && !(nonDeterminant.contains(ch))){
-                    determinant.add(ch);
-                }
-            }
+        for (Productions<T> p: P) {
+//            for (T ch:p.getDefinition()) {
+//                if (DefaultValues.availableChars.contains(ch) && !(nonDeterminant.contains(ch))){
+//                    determinant.add(ch);
+//                }
+//            }
         }
     }
 
-    public void addProduction(Productions P){
+    public void addProduction(Productions<T> P){
         nonDeterminant.add(P.getNonDeterminant());
         this.P.add(P);
     }
 
-    public ArrayList<Integer> getNonDeterminant() {
+    public ArrayList<T> getNonDeterminant() {
         return nonDeterminant;
     }
 
-    public void setNonDeterminant(ArrayList<Integer> nonDeterminant) {
+    public void setNonDeterminant(ArrayList<T> nonDeterminant) {
         this.nonDeterminant = nonDeterminant;
     }
 
-    public ArrayList<Integer> getDeterminant() {
+    public ArrayList<T> getDeterminant() {
         return determinant;
     }
 
-    public void setDeterminant(ArrayList<Integer> determinant) {
+    public void setDeterminant(ArrayList<T> determinant) {
         this.determinant = determinant;
     }
 
-    public Set<Productions> getP() {
+    public Set<Productions<T>> getP() {
         return P;
     }
 
-    public void setP(Set<Productions> p) {
+    public void setP(Set<Productions<T>> p) {
         P = p;
     }
 

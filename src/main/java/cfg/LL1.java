@@ -9,9 +9,9 @@ public class LL1 {
     }
 
     public void constructTable(){
-        for (int i:cfg.getNonDeterminant()) {
-
-        }
+//        for (int i:cfg.getNonDeterminant()) {
+//
+//        }
     }
 
     public void First(){

@@ -16,7 +16,7 @@ switch = "switch"
 
 TOKENS
 
-ident = letter{letter|digit} EXCEPT KEYWORDS.
+ident = letter{letter|digit} EXCEPT KEYWO new string(' ',0)RDS.
 number = digit{digit}.
 
 PRODUCTIONS
@@ -24,7 +24,7 @@ PRODUCTIONS
 Expr= {Stat (";")}".".
 
 Stat = 							(.int value;.)
-	Expression< ref value>		(.System.Console.WriteLn(value.ToString());.)
+	Expression< ref value>		(.System.out.println(value.toString());.)
 	.
 
 Expression<ref int result> =		(.int result1,result2;.)

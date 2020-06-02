@@ -68,6 +68,20 @@ public final class DefaultValues {
         }
     };
 
+    public static ArrayList<Integer> NULLABLE = new ArrayList<>(){
+        {
+            addAll(availableChars);
+            add(STAR);
+        }
+    };
     public static Operations opertaions = new Operations();
 
+    public static String getalphabet(){
+        StringBuilder s = new StringBuilder();
+        for (int i:alphabet) {
+            s.append((char) i).append((char) DefaultValues.OR);
+        }
+        s.setLength(s.length() - 1);
+        return s.toString();
+    }
 }
