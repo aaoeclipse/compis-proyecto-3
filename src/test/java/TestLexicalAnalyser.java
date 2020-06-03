@@ -99,4 +99,57 @@ public class TestLexicalAnalyser extends TestCase {
         assertEquals("test", testResult.get(0).getName());
 
     }
+
+    public void testCocorDoubleAritmeticaCHARACTERS(){
+        LexicalAnalyzer lex = new LexicalAnalyzer();
+        lex.addCocolDoubleAritmetica();
+        ArrayList<String> s = lex.simulating('1');
+        assertEquals("digit",s.get(0));
+
+        s = lex.simulating((char) 10);
+        assertEquals("eol",s.get(0));
+
+        s = lex.simulating((char) 9);
+        assertEquals("tab",s.get(0));
+
+        s = lex.simulating(' ');
+        assertEquals("blanco",s.get(0));
+
+        s = lex.simulating('&');
+        assertEquals("<UNKNOWN Token>", s.get(0));
+    }
+
+    public void testCocorDoubleAritmeticaKEYWORDS(){
+        LexicalAnalyzer lex = new LexicalAnalyzer();
+        lex.addCocolDoubleAritmetica();
+        ArrayList<String> s = lex.simulating('1');
+        for (String ss:s) {
+            System.out.println("ss = " + ss);
+        }
+        s = lex.simulating('0');
+        for (String ss:s) {
+            System.out.println("ss = " + ss);
+        }
+        s = lex.simulating('9');
+        for (String ss:s) {
+            System.out.println("ss = " + ss);
+        }
+    }
+
+    public void testCocorDoubleAritmeticaCHARACTERSandKEYWORDS(){
+        LexicalAnalyzer lex = new LexicalAnalyzer();
+        lex.addCocolDoubleAritmetica();
+        ArrayList<String> s = lex.simulating('1');
+        for (String ss:s) {
+            System.out.println("ss = " + ss);
+        }
+        s = lex.simulating('0');
+        for (String ss:s) {
+            System.out.println("ss = " + ss);
+        }
+        s = lex.simulating('9');
+        for (String ss:s) {
+            System.out.println("ss = " + ss);
+        }
+    }
 }

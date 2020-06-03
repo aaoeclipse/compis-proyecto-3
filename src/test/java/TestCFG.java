@@ -113,7 +113,7 @@ public class TestCFG extends TestCase {
                 "Lettr -> letter\n";
 
         this.CFG = new ContextFreeGrammar<Token<DFA>>();
-        
+        fail();
     }
 
     public void testLeftRecursionRemoval(){

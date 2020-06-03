@@ -32,6 +32,12 @@ public class DFA <T>{
         State curr;
         State foll;
 
+//        if (arInt.size() == 1){
+//            curr = new State("0", true, false);
+//            foll = new State("1", false, true);
+//            this.transitionTable.add(new TransitionState(curr, arInt.get(0), foll));
+//            return;
+//        }
         if (OR) {
             curr = new State("0", true, false);
             foll = new State("1", false, true);
@@ -153,10 +159,8 @@ public class DFA <T>{
     }
 
     private State findStateContains(int i) {
-        for (TransitionState t:
-             this.transitionTable) {
-            for (char c: t.getFirstState().getId().toCharArray()
-                 ) {
+        for (TransitionState t: this.transitionTable) {
+            for (char c: t.getFirstState().getId().toCharArray()) {
                 if (i == (int) c){
                     return t.getFirstState();
                 }

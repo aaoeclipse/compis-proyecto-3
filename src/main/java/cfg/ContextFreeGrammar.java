@@ -35,6 +35,9 @@ public class ContextFreeGrammar<T> {
         this.P.add(P);
     }
 
+
+
+
     public ArrayList<T> getNonDeterminant() {
         return nonDeterminant;
     }

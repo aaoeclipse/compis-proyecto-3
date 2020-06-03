@@ -1,10 +1,13 @@
 package dataStructures;
 
+import automata.DFA;
+
 import java.util.Objects;
 
 public class Token<T> {
     private String name;
     private T value;
+    private DFA dfa;
 
     public Token(){}
 
@@ -46,5 +49,13 @@ public class Token<T> {
     @Override
     public int hashCode() {
         return Objects.hash(name, value);
+    }
+
+    public void addDFA(String character) {
+
+    }
+
+    public boolean printDFA() {
+        return false;
     }
 }

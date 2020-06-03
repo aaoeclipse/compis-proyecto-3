@@ -79,7 +79,18 @@ public class TestAutomata extends TestCase {
     }
 
     public void testConcatConcat(){
-        reader = new ReaderCustom("abc");
+        dfa = new DFA();
+        String testCONCAT = "abca"+(char)DefaultValues.STAR;
+        SyntaxTree tree = new SyntaxTree(testCONCAT);
+        tree.followpos();
+        dfa.constructDFA2(tree);
+
+        assertFalse(dfa.fullSimulate("ab"));
+        dfa.restarState();
+
+        assertTrue(dfa.fullSimulate("abc"));
+        dfa.restarState();
+        assertTrue(dfa.fullSimulate("abcaaaaa"));
     }
 
     public void testORSimple(){
