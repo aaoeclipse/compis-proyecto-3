@@ -221,7 +221,7 @@ public class SyntaxTree {
             }
         }
 
-        private NodeSyntax<Integer> getSyntaxNode(int idInt){
+    private NodeSyntax<Integer> getSyntaxNode(int idInt){
             ArrayList<Integer> id = new ArrayList<>();
             id.add(idInt);
             for (NodeSyntax<Integer> n:allNodes) {

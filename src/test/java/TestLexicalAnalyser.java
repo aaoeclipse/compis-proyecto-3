@@ -1,9 +1,7 @@
 import automata.DFA;
-import dataStructures.LexicalAnalyzer;
+import controler.LexicalAnalyzer;
 import dataStructures.Token;
 import junit.framework.TestCase;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import reader.DefaultValues;
 
 import java.util.ArrayList;
@@ -103,6 +101,7 @@ public class TestLexicalAnalyser extends TestCase {
     public void testCocorDoubleAritmeticaCHARACTERS(){
         LexicalAnalyzer lex = new LexicalAnalyzer();
         lex.addCocolDoubleAritmetica();
+
         ArrayList<String> s = lex.simulating('1');
         assertEquals("digit",s.get(0));
 
@@ -122,18 +121,22 @@ public class TestLexicalAnalyser extends TestCase {
     public void testCocorDoubleAritmeticaKEYWORDS(){
         LexicalAnalyzer lex = new LexicalAnalyzer();
         lex.addCocolDoubleAritmetica();
-        ArrayList<String> s = lex.simulating('1');
+        ArrayList<String> s = lex.simulating('d');
+        s = lex.simulating('o');
         for (String ss:s) {
             System.out.println("ss = " + ss);
         }
-        s = lex.simulating('0');
+        assertEquals("do", s.get(0));
+        lex.simulating('w');
+        lex.simulating('h');
+        lex.simulating('i');
+        lex.simulating('l');
+        s = lex.simulating('e');
         for (String ss:s) {
             System.out.println("ss = " + ss);
         }
-        s = lex.simulating('9');
-        for (String ss:s) {
-            System.out.println("ss = " + ss);
-        }
+        assertEquals("while", s.get(0));
+
     }
 
     public void testCocorDoubleAritmeticaCHARACTERSandKEYWORDS(){
@@ -151,5 +154,16 @@ public class TestLexicalAnalyser extends TestCase {
         for (String ss:s) {
             System.out.println("ss = " + ss);
         }
+    }
+
+    public void testDoubleAritmeicaTokens(){
+        LexicalAnalyzer lex = new LexicalAnalyzer();
+        lex.addCocolDoubleAritmetica();
+
+        ArrayList<String> s = lex.simulating('1');
+        assertEquals("digit",s.get(0));
+
+        s = lex.simulating((char) 10);
+        assertEquals("eol",s.get(0));
     }
 }

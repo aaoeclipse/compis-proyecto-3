@@ -8,17 +8,37 @@ public class Token<T> {
     private String name;
     private T value;
     private DFA dfa;
+    private boolean keyword;
 
-    public Token(){}
+    public Token(){
+        keyword = false;
+    }
 
     public Token(String name){
+        keyword = false;
         this.name = name;
     }
 
     public Token(String name, T value) {
+        keyword = false;
         this.name = name;
         this.value = value;
     }
+
+    public Token(String name, T value, boolean keyword) {
+        this.keyword = keyword;
+        this.name = name;
+        this.value = value;
+    }
+
+    public boolean isKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(boolean keyword) {
+        this.keyword = keyword;
+    }
+
     public String getName() {
         return name;
     }

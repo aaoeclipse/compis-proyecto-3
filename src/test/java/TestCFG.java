@@ -1,4 +1,5 @@
 import automata.DFA;
+import automata.DFA2;
 import automata.State;
 import automata.TransitionState;
 import cfg.ContextFreeGrammar;
@@ -15,52 +16,23 @@ public class TestCFG extends TestCase {
     DFA dfaAlpha;
     DFA dfaNum;
 
-    protected void setUp(){
-        CFG = new ContextFreeGrammar<Integer>();
-        String definitionOfProduction = "abB|c";
-        ArrayList<Integer> definition = new ArrayList<>();
+    public void testSimplePrudction(){
+        CFG = new ContextFreeGrammar();
+        prod = new Productions<Token<DFA2>>();
 
-        for (char c: definitionOfProduction.toCharArray()) {
-            definition.add((int) c);
-        }
+        ArrayList<Token<DFA2>> Numbers = new ArrayList<Token<DFA2>>();
+        DFA<Integer> digit = new DFA();
 
-        prod = new Productions<Integer>( (int)'A', definition );
+        digit.constructDFASimple(DefaultValues.digits, true);
 
-        CFG.addProduction(prod);
+        Numbers.add(new Token("digit", digit));
+        Token<DFA2> firstProduction = new Token("Number", Numbers);
 
-        definitionOfProduction = "d";
-        definition = new ArrayList<>();
-        for (char c: definitionOfProduction.toCharArray()) {
-            definition.add((int) c);
-        }
-        prod = new Productions((int) 'B', definition);
-        CFG.addProduction(prod);
 
-        // CREATING DFAS for test
-        // letter, contains all alphabet
-        dfaAlpha = new DFA();
-        int counter = 1;
-        State s1 = new State(""+counter,true, false);
-        counter++;
-        State s2 = new State(""+counter,false, false);
-        ArrayList<TransitionState<Integer>> transitionTable = new ArrayList<>();
-        for (int i:
-                DefaultValues.alphabet) {
 
-        }
-         s1 = new State("1",true, false);
-        int transition = (int) 'a';
-        s2 = new State("2",false, false);
-        transitionTable.add(new TransitionState<Integer>(s1, transition, s2));
-        transition = (int) 'b';
-        transitionTable.add(new TransitionState<Integer>(s1, transition, s2));
-        s1 = new State("3",false,true);
-        transition = (int) 'c';
-        transitionTable.add(new TransitionState<Integer>(s2, transition, s2));
-        transition = (int) 'd';
-        transitionTable.add(new TransitionState<Integer>(s2, transition, s1));
-
-//        dfa.setTransitionTable(transitionTable);
+//        prod = new Productions(firstProduction, );
+//        TODO aqui me quede
+        System.out.println("prod = " + prod);
     }
 
     public void testProduction(){
@@ -75,20 +47,22 @@ public class TestCFG extends TestCase {
     }
 
     public void testContextFreeGrammarNonDeterminants(){
-//        CFG.findDeterminant();
-//        ArrayList<Integer> expected = new ArrayList<Integer>(){
-//            {
-//                add((int) 'a');
-//                add((int) 'b');
-//                add((int) 'c');
-//                add((int) 'd');
-//            }
-//        };
-//        boolean test = true;
-//        for (int i: CFG.getDeterminant()) {
-//            if (! (expected.contains(i)))
-//                test = false;
-//        }
+        CFG.findDeterminant();
+        ArrayList<Integer> expected = new ArrayList<Integer>(){
+            {
+                add((int) 'a');
+                add((int) 'b');
+                add((int) 'c');
+                add((int) 'd');
+            }
+        };
+        boolean test = false;
+        for (Object i: CFG.getDeterminant()) {
+            if (!expected.contains(i)) {
+                test = false;
+                break;
+            }
+        }
 
         fail();
     }
@@ -106,22 +80,9 @@ public class TestCFG extends TestCase {
         fail();
     }
 
-    public void testDFAwithProduction(){
-        String test = "santi = number Ltter | Ltter." +
-                       "Ltter = letter.";
-        String result = "santi -> number Ltter | Ltter\n"+
-                "Lettr -> letter\n";
+    public void testProdcutionWithTokens(){
+        String testProduction = "Expr = Stat \";\" | number.\n";
+        CFG = new ContextFreeGrammar();
 
-        this.CFG = new ContextFreeGrammar<Token<DFA>>();
-        fail();
-    }
-
-    public void testLeftRecursionRemoval(){
-        // Testing A -> Ax|b
-        String definitionOfProduction = "Ax|b";
-        String nonDeterminant = "A";
-        // Result should be A -> bA'
-        //                 A' -> xA'| epsilon
-        fail();
     }
 }

@@ -50,8 +50,9 @@ Factor<ref double result> =		(.double sign=1;.)
 	)							(.result*=sign;.)
 	.
 
-Number<ref double result> =	
-	(number				
+Number<ref double result> =
+	(number
 	|decnumber)(.result = double.Parse(LastToken.Value);.)
 	.
+
 END Double

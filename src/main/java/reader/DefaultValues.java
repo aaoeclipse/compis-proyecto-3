@@ -13,6 +13,8 @@ public final class DefaultValues {
                 // LOWER CASE
                 add(97 + i);
             }
+            add((int) '.');
+            add((int) '|');
         }
     };
     public static ArrayList<Integer> digits = new ArrayList<Integer>(){

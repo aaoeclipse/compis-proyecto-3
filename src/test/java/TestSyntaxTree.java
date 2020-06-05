@@ -11,7 +11,6 @@ public class TestSyntaxTree extends TestCase {
         stree = new SyntaxTree();
     }
 
-
     public void testSyntaxTreeTokens(){
         DFA one = new DFA("hi");
         Token<DFA> t1 = new Token<>();
@@ -24,6 +23,7 @@ public class TestSyntaxTree extends TestCase {
     public void testConcat() {
         String test = stree.withConcat("ab");
         assertEquals("a" + (char) DefaultValues.CONCAT + "b", test);
+        System.out.println("test = " + test + " == a" + (char) DefaultValues.CONCAT + "b") ;
 
         test = stree.withConcat("abc");
         assertEquals("a" + (char) DefaultValues.CONCAT + "b" + (char) DefaultValues.CONCAT + "c", test);
@@ -36,6 +36,8 @@ public class TestSyntaxTree extends TestCase {
 
         test = stree.withConcat("a|b(c|c)(d)");
         assertEquals("a|b" + (char) DefaultValues.CONCAT + "(c|c)" + (char) DefaultValues.CONCAT + "(d)", test);
+        System.out.println("test = " + test + " == a|b" + (char) DefaultValues.CONCAT + "(c|c)" + (char) DefaultValues.CONCAT + "(d)") ;
+
 
         test = stree.withConcat("a|b|(c|c)(d)");
         assertEquals("a|b|(c|c)" + (char) DefaultValues.CONCAT + "(d)", test);
@@ -47,9 +49,8 @@ public class TestSyntaxTree extends TestCase {
     public void testPostfix(){
         String test = "a"+ (char) DefaultValues.OR +"b(e"+(char)DefaultValues.OR+"c)"+(char)DefaultValues.STAR;
         stree = new SyntaxTree(test);
-
+        System.out.println("test = " + stree.toString() + "== ab|ec|*."+(char)DefaultValues.EOF) ;
         assertEquals("ab|ec|*."+(char)DefaultValues.EOF, stree.toString());
-//        stree = new SyntaxTree();
     }
 
     public void testSyntaxTreeSimple(){
@@ -58,6 +59,8 @@ public class TestSyntaxTree extends TestCase {
         assertEquals("Node (2500) {[1, 2]}{[3]} -> (2501, -1)", stree.getTreeRoot());
         stree = new SyntaxTree("a"+(char)DefaultValues.STAR);
         assertEquals("Node (2500) {[1]}{[2]} -> (2502, -1)", stree.getTreeRoot());
+        System.out.println("testString = " + testString);
+        System.out.println("result = " + stree.getTreeRoot());
     }
 
     public void testBiggerTree(){
@@ -68,7 +71,13 @@ public class TestSyntaxTree extends TestCase {
                 "Node (2502) {[1, 2]}{[1, 2]} -> (2501)\n"+
                 "Node (-1) {[3]}{[3]} -> ()\n" +
                 "Node (2500) {[1, 2]}{[3]} -> (2502, -1)\n";
+
+        System.out.println("testString = " + testString);
+
+        System.out.println("expected result = " + result);
         stree = new SyntaxTree(testString);
+        System.out.println("actual result = " + stree.getFullTree());
+
         assertEquals(result, stree.getFullTree());
 
         testString = "a"+(char)DefaultValues.OR+"b(c"+(char)DefaultValues.OR + "d)"+(char)DefaultValues.STAR ;
@@ -133,8 +142,14 @@ public class TestSyntaxTree extends TestCase {
                 "#.7 | []\n";
         stree = new SyntaxTree(testString);
         stree.followpos();
+
         assertEquals(result, stree.getToStringFollowPos());
+
+        System.out.println("testString = " + testString);
+        System.out.println("expected result = " + result);
+        System.out.println("result = " + stree.getToStringFollowPos());
     }
+
     public void testFollowPosSimple(){
         String testString = "a";
         String result =
@@ -206,6 +221,7 @@ public class TestSyntaxTree extends TestCase {
         stree = new SyntaxTree(testString);
         stree.followpos();
         assertEquals(result, stree.getToStringFollowPos());
+        System.out.println("stree.getToStringFollowPos() = " + stree.getToStringFollowPos());
     }
 
 }

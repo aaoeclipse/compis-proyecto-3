@@ -11,6 +11,8 @@ public class State {
 
     public State(){
         this.id = UUID.randomUUID().toString();
+        this.i = false;
+        this.f = false;
     }
 
     public State(String id, boolean i, boolean f) {

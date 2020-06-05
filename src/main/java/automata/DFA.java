@@ -24,20 +24,16 @@ public class DFA <T>{
     }
 
     public DFA(String constructor){
-        this.constructor = constructor;
         this.transitionTable = new ArrayList<>();
+        SyntaxTree converter = new SyntaxTree(constructor);
+        converter.followpos();
+        constructDFA2(converter);
     }
 
     public void constructDFASimple(ArrayList<Integer> arInt, boolean OR) {
         State curr;
         State foll;
 
-//        if (arInt.size() == 1){
-//            curr = new State("0", true, false);
-//            foll = new State("1", false, true);
-//            this.transitionTable.add(new TransitionState(curr, arInt.get(0), foll));
-//            return;
-//        }
         if (OR) {
             curr = new State("0", true, false);
             foll = new State("1", false, true);
@@ -60,8 +56,19 @@ public class DFA <T>{
     public void constructDFA2(SyntaxTree tree){
         visited = new ArrayList<>();
         Map<NodeSyntax<Integer>, ArrayList<Integer>> table = tree.followTable;
+
         boolean running = true;
         this.transitionTable = new ArrayList<>();
+
+        if (table.size() == 2){
+            for (Map.Entry<NodeSyntax<Integer>, ArrayList<Integer>> entry : table.entrySet()) {
+                if (!entry.getKey().getValue().equals(-1)) {
+                    State firstandfinal = new State(""+1, true, true);
+                    transitionTable.add(new TransitionState(firstandfinal, entry.getKey().getValue(), firstandfinal));
+                }
+            }
+            return;
+        }
         State curr;
         State follow;
 
@@ -81,7 +88,7 @@ public class DFA <T>{
             visited.add(curr.getId());
 
             // muchas variables
-            if (curr.getId().length() > 3){ //[3,4,5]
+            if (curr.getId().length() > 3){
                 newRow =  new HashMap();
 
                 // tiene mas que 1
@@ -269,5 +276,15 @@ public class DFA <T>{
 
     public void restarState(){
         this.currentState = getInitialState();
+    }
+
+    @Override
+    public String toString() {
+        return "DFA{" +
+                "transitionTable=" + transitionTable +
+                ", currentState=" + currentState +
+                ", constructor='" + constructor + '\'' +
+                ", visited=" + visited +
+                '}';
     }
 }

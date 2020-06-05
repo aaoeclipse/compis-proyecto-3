@@ -1,10 +1,8 @@
 package reader;
 
-import dataStructures.LexicalAnalyzer;
+import controler.LexicalAnalyzer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class CocorReader {
     ReaderCustom reader;

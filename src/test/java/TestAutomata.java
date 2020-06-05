@@ -1,7 +1,9 @@
 import automata.DFA;
+import automata.DFA2;
 import automata.State;
 import automata.TransitionState;
 import dataStructures.SyntaxTree;
+import dataStructures.Token;
 import junit.framework.TestCase;
 import reader.DefaultValues;
 import reader.ReaderCustom;
@@ -100,13 +102,53 @@ public class TestAutomata extends TestCase {
         tree.followpos();
         dfa.constructDFA2(tree);
 
-        assertTrue(dfa.fullSimulate("ab"));
+        assertTrue(dfa.fullSimulate("a"));
         assertFalse(dfa.fullSimulate("abc"));
 
     }
 
     public void testStarSimple(){
-        reader = new ReaderCustom("a*");
+        dfa = new DFA();
+        String testOR = "a"+(char)DefaultValues.STAR;
+        SyntaxTree tree = new SyntaxTree(testOR);
+        tree.followpos();
+        dfa.constructDFA2(tree);
 
+        assertTrue(dfa.fullSimulate("a"));
+        assertTrue(dfa.fullSimulate("aaaaaaa"));
+        assertFalse(dfa.fullSimulate("abc"));
+
+    }
+
+    public void testDFA2Simple(){
+        DFA<Integer> dfa = new DFA<Integer>("ab");
+        Token<DFA<Integer>> abcd = new Token<>("a", dfa);
+        DFA2 dfa2 = new DFA2(abcd);
+        dfa2.dfa2Add(abcd, 0);
+        assertFalse(dfa2.simulate('a'));
+        assertFalse(dfa2.simulate('b'));
+        assertFalse(dfa2.simulate('a'));
+        assertTrue(dfa2.simulate('b'));
+    }
+
+    public void testDFA2SimpleStar(){
+        DFA<Integer> dfa = new DFA<Integer>("b");
+        Token<DFA<Integer>> abcd = new Token<>("b", dfa);
+
+        DFA2 dfa2 = new DFA2(abcd);
+
+        dfa = new DFA<Integer>("a");
+        abcd = new Token<>("a", dfa);
+
+        dfa2.dfa2Add(abcd, 2);
+
+        assertTrue(dfa2.simulate('b'));
+        assertTrue(dfa2.simulate('a'));
+        assertFalse(dfa2.simulate('c'));
+        assertTrue(dfa2.simulate('b'));
+        assertTrue(dfa2.simulate('a'));
+        assertTrue(dfa2.simulate('a'));
+        assertTrue(dfa2.simulate('b'));
+        assertFalse(dfa2.simulate('c'));
     }
 }
